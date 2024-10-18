@@ -1,0 +1,85 @@
+from googleapiclient.discovery import build
+from config import settings
+
+service = build('books', 'v1', developerKey=settings.GOOGLE_API_KEY)
+
+
+def fetch_book_data_from_google_books(title, author):
+    query = f'intitle:{title}'
+    if author:
+        query += f'+inauthor:{author}'
+
+    request = service.volumes().list(q=query)
+    response = request.execute()
+    if 'items' in response:
+        book_info = response['items'][0]['volumeInfo']
+        return complete_book_information(book_info)
+    return None
+
+
+def fetch_books_data_from_google_books(title, author, start_index, max_results):
+    query = f'intitle:{title}'
+    if author:
+        query += f'+inauthor:{author}'
+
+    request = service.volumes().list(
+        q=query,
+        langRestrict='es',
+        maxResults=max_results,
+        startIndex=start_index
+    )
+    response = request.execute()
+    result = []
+    for item in response.get('items', []):
+        result.append(complete_book_information(item['volumeInfo']))
+
+    return result
+
+
+def search_newest_books(subject, order, start_index, max_results):
+    query = 'subject:' + subject
+    results = service.volumes().list(
+        q=query,
+        orderBy=order,
+        maxResults=max_results,
+        startIndex=start_index
+    ).execute()
+
+    result = []
+    for item in results.get('items', []):
+        result.append(complete_book_information(item['volumeInfo']))
+
+    return result
+
+
+def complete_book_information(book_info):
+    isbn_13, isbn_10 = get_isbn(book_info)
+
+    return {
+        'title': book_info.get('title'),
+        'subTitle': book_info.get('subtitle'),
+        'description': book_info.get('description'),
+        'author': ', '.join(book_info.get('authors', [])),
+        'genre': ', '.join(book_info.get('categories', [])),
+        'pages': book_info.get('pageCount'),
+        'coverImage': book_info.get('imageLinks', {}).get('thumbnail', ''),
+        'publishedDate': book_info.get('publishedDate'),
+        'description': book_info.get('description', ''),
+        'averageRating': book_info.get('averageRating'),
+        'isbn13': isbn_13,
+        'isbn10': isbn_10
+    }
+
+
+def get_isbn(book_info):
+    isbn_13 = None
+    isbn_10 = None
+
+    identifiers = book_info.get('industryIdentifiers', [])
+
+    for identifier in identifiers:
+        if identifier.get('type') == 'ISBN_13':
+            isbn_13 = identifier.get('identifier')
+        elif identifier.get('type') == 'ISBN_10':
+            isbn_10 = identifier.get('identifier')
+    return isbn_13, isbn_10
