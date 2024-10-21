@@ -4,9 +4,15 @@
     {
       "src": "config/wsgi.py",
       "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+      "config": {
+        "maxLambdaSize": "15mb",
+        "runtime": "python3.12"
+      }
     }
   ],
+  "env": {
+    "POST_BUILD": "python manage.py migrate"
+  },
   "routes": [
     {
       "src": "/(.*)",
