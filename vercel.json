@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "config/asgi.py",
+      "src": "config/wsgi.py",
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "15mb",
@@ -13,7 +13,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "config/asgi.py"
+      "dest": "config/wsgi.py"
     }
   ]
 }
