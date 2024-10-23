@@ -42,8 +42,12 @@ fpdf = "~=1.7.2"
 django-filter = "==24.2"
 django-axes = "==6.5.1"
 stripe = "==9.7.0"
-
+google-api-core = "==2.21.0"
+google-api-python-client = "==2.149.0"
+google-auth = "==2.35.0"
+google-auth-httplib2 = "==0.2.0"
+googleapis-common-protos = "==1.65.0"
 [dev-packages]
 
 [requires]
-python_version = "3.12"
+python_version = "3.9"
