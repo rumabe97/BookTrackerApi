@@ -2,21 +2,18 @@
   "version": 2,
   "builds": [
     {
-      "src": "config/wsgi.py",
+      "src": "config/asgi.py",
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "15mb",
-        "runtime": "python3.12"
+        "runtime": "python3.9"
       }
     }
   ],
-  "env": {
-    "POST_BUILD": "python manage.py migrate"
-  },
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "config/wsgi.py"
+      "dest": "config/asgi.py"
     }
   ]
 }
