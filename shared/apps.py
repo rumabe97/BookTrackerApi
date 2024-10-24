@@ -5,3 +5,6 @@ from django.core.management import call_command
 class SharedConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'shared'
+
+    def ready(self):
+        call_command('migrate')

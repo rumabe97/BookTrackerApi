@@ -1,10 +1,6 @@
 import uuid
-from email.policy import default
-from enum import unique
-from lib2to3.pgen2.tokenize import blank_re
 
 from django.db import models
-from django.db.models.deletion import CASCADE
 
 
 # Create your models here.
