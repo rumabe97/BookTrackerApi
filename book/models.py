@@ -11,6 +11,7 @@ from django.db.models.deletion import CASCADE
 
 class Book(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    idGoogle = models.CharField(editable=False, max_length=255)
     STATUS_CHOICES = [
         ('reading', 'Reading'),
         ('completed', 'Completed'),

@@ -12,15 +12,15 @@ class BookSerializer(serializers.ModelSerializer):
 
 
 class CreateBookSerializer(serializers.ModelSerializer):
+    idGoogle = serializers.CharField(write_only=True, required=True)
+
     class Meta:
         model = Book
-        fields = ['title', 'author', 'status']
+        fields = ['idGoogle', 'status']
 
     def create(self, validated_data):
-        title = validated_data.get('title')
-        author = validated_data.get('author')
-
-        book_data = fetch_book_data_from_google_books(title, author)
+        idGoogle = validated_data.get('idGoogle')
+        book_data = fetch_book_data_from_google_books(idGoogle)
 
         if book_data:
             validated_data.update(book_data)

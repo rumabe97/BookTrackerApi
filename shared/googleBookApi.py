@@ -4,17 +4,13 @@ from config import settings
 service = build('books', 'v1', developerKey=settings.GOOGLE_API_KEY)
 
 
-def fetch_book_data_from_google_books(title, author):
-    query = f'intitle:{title}'
-    if author:
-        query += f'+inauthor:{author}'
-
-    request = service.volumes().list(q=query)
+def fetch_book_data_from_google_books(idGoogle):
+    request = service.volumes().get(volumeId=idGoogle)
     response = request.execute()
-    if 'items' in response:
-        book_info = response['items'][0]['volumeInfo']
-        return complete_book_information(book_info)
-    return None
+    print(response)
+    book_info = response['volumeInfo']
+    if book_info is None: return None
+    return complete_book_information(book_info, idGoogle)
 
 
 def fetch_books_data_from_google_books(title, author, start_index, max_results):
@@ -31,7 +27,7 @@ def fetch_books_data_from_google_books(title, author, start_index, max_results):
     response = request.execute()
     result = []
     for item in response.get('items', []):
-        result.append(complete_book_information(item['volumeInfo']))
+        result.append(complete_book_information(item['volumeInfo'], item['id']))
 
     return result
 
@@ -47,14 +43,13 @@ def search_newest_books(subject, order, start_index, max_results):
 
     result = []
     for item in results.get('items', []):
-        result.append(complete_book_information(item['volumeInfo']))
+        result.append(complete_book_information(item['volumeInfo'], item['id']))
 
     return result
 
 
-def complete_book_information(book_info):
+def complete_book_information(book_info, idGoogle):
     isbn_13, isbn_10 = get_isbn(book_info)
-
     return {
         'title': book_info.get('title'),
         'subTitle': book_info.get('subtitle'),
@@ -67,7 +62,8 @@ def complete_book_information(book_info):
         'description': book_info.get('description', ''),
         'averageRating': book_info.get('averageRating'),
         'isbn13': isbn_13,
-        'isbn10': isbn_10
+        'isbn10': isbn_10,
+        'idGoogle': idGoogle
     }
 
 
