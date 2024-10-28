@@ -36,6 +36,7 @@ def search_newest_books(subject, order, start_index, max_results):
     query = 'subject:' + subject
     results = service.volumes().list(
         q=query,
+        langRestrict='es',
         orderBy=order,
         maxResults=max_results,
         startIndex=start_index
