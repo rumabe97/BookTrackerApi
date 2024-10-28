@@ -80,3 +80,16 @@ def get_isbn(book_info):
         elif identifier.get('type') == 'ISBN_10':
             isbn_10 = identifier.get('identifier')
     return isbn_13, isbn_10
+
+
+def healthcheckApi():
+    query = 'test'
+    result = service.volumes().list(
+        q=query,
+        maxResults=1
+    ).execute()
+
+    if not result or "items" not in result:
+        return False
+
+    return True

@@ -20,6 +20,7 @@ from django.urls import path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 from django.conf.urls import include
 from config import settings
+from config.healthcheck import healthcheck
 
 urlpatterns = [
                   path(settings.ADMIN_URL, admin.site.urls),
@@ -28,4 +29,5 @@ urlpatterns = [
                   path('v0/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
                   path('v0/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
                   path('v0/book/', include('book.urls')),
+                  path("healthcheck/", healthcheck, name="healthcheck"),
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
