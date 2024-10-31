@@ -25,10 +25,14 @@ def fetch_books_data_from_google_books(title, author, start_index, max_results):
         startIndex=start_index
     )
     response = request.execute()
-    result = []
+    data = []
     for item in response.get('items', []):
-        result.append(complete_book_information(item['volumeInfo'], item['id']))
+        data.append(complete_book_information(item['volumeInfo'], item['id']))
 
+    result = {
+        "data": data,
+        "totalItems": response.get('totalItems', 0)
+    }
     return result
 
 
@@ -42,10 +46,14 @@ def search_newest_books(subject, order, start_index, max_results):
         startIndex=start_index
     ).execute()
 
-    result = []
+    data = []
     for item in results.get('items', []):
-        result.append(complete_book_information(item['volumeInfo'], item['id']))
+        data.append(complete_book_information(item['volumeInfo'], item['id']))
 
+    result = {
+        "data": data,
+        "totalItems": results.get('totalItems', 0)
+    }
     return result
 
 

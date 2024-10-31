@@ -45,8 +45,12 @@ class BookViewSet(DynamicSerializersMixin, mixins.CreateModelMixin, mixins.Destr
         max_results = int(request.query_params.get('max_results', 10))
         start_index = (page - 1) * max_results
         books = search_newest_books(subject, order, start_index, max_results)
-        serializer = BookSerializer(books, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        serializer = BookSerializer(books.get('data', []), many=True)
+        response = {
+            "totalItems": books.get("totalItems", 0),
+            "data": serializer.data
+        }
+        return JsonResponse(response, safe=False)
 
     @action(methods=['get'], detail=False, url_path='search_google_api', url_name="search_google_api")
     def search_google_api(self, request):
@@ -56,8 +60,12 @@ class BookViewSet(DynamicSerializersMixin, mixins.CreateModelMixin, mixins.Destr
         max_results = int(request.query_params.get('max_results', 10))
         start_index = (page - 1) * max_results
         books = fetch_books_data_from_google_books(title, author, start_index, max_results)
-        serializer = BookSerializer(books, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        serializer = BookSerializer(books.get('data', []), many=True)
+        response = {
+            "totalItems": books.get("totalItems", 0),
+            "data": serializer.data
+        }
+        return JsonResponse(response, safe=False)
 
-    # def get_permissions(self):
-    #     return [APIKeyPermission()]
+    def get_permissions(self):
+        return [APIKeyPermission()]
