@@ -12,6 +12,8 @@ from shared.googleBookApi import search_newest_books, fetch_books_data_from_goog
 from shared.mixins import DynamicSerializersMixin, APIKeyPermission
 from django_filters import rest_framework as filters
 
+from django.db.models import Count
+
 
 @extend_schema_view(
     list=extend_schema(description='Get paginated list of books.'),
@@ -66,6 +68,12 @@ class BookViewSet(DynamicSerializersMixin, mixins.CreateModelMixin, mixins.Destr
             "data": serializer.data
         }
         return JsonResponse(response, safe=False)
+
+    @action(methods=['get'], detail=False, url_path='get_status_count', url_name="get_status_count")
+    def get_status_count(self, request):
+        counts = Book.objects.values('status').annotate(count=Count('id'))
+        result = {f"{count['status']}": count['count'] for count in counts}
+        return JsonResponse(result, safe=False)
 
     def get_permissions(self):
         return [APIKeyPermission()]
