@@ -1,4 +1,6 @@
 from googleapiclient.discovery import build
+
+from book.models import Book
 from config import settings
 
 service = build('books', 'v1', developerKey=settings.GOOGLE_API_KEY)
@@ -59,7 +61,8 @@ def search_newest_books(subject, order, start_index, max_results):
 
 def complete_book_information(book_info, idGoogle):
     isbn_13, isbn_10 = get_isbn(book_info)
-    return {
+    books = Book.objects.filter(idGoogle=idGoogle)
+    result = {
         'title': book_info.get('title'),
         'subTitle': book_info.get('subtitle'),
         'description': book_info.get('description'),
@@ -74,6 +77,12 @@ def complete_book_information(book_info, idGoogle):
         'isbn10': isbn_10,
         'idGoogle': idGoogle
     }
+
+    if books.exists():
+        book = books.first()
+        result['id'] = book.id
+        result['status'] = book.status
+    return result
 
 
 def get_isbn(book_info):

@@ -75,5 +75,5 @@ class BookViewSet(DynamicSerializersMixin, mixins.CreateModelMixin, mixins.Destr
         result = {f"{count['status']}": count['count'] for count in counts}
         return JsonResponse(result, safe=False)
 
-    def get_permissions(self):
-        return [APIKeyPermission()]
+    # def get_permissions(self):
+    #     return [APIKeyPermission()]
