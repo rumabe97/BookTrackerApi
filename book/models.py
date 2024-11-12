@@ -13,6 +13,7 @@ class Book(models.Model):
         ('completed', 'Completed'),
         ('pending', 'Pending'),
         ('wishlist', 'Wishlist'),
+        ('discarded', 'Discarded'),
     ]
     title = models.CharField(max_length=255, unique=True, null=False, default='')
     subTitle = models.CharField(max_length=255, unique=False, null=True, default='')

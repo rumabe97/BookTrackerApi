@@ -82,6 +82,8 @@ def complete_book_information(book_info, idGoogle):
         book = books.first()
         result['id'] = book.id
         result['status'] = book.status
+        result['created_at'] = book.created_at
+        result['updated_at'] = book.updated_at
     return result
 
 
