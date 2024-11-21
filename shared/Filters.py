@@ -4,11 +4,23 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from django.db.models import Q
 
+STATUS_CHOICES = [
+    ('reading', 'Reading'),
+    ('completed', 'Completed'),
+    ('pending', 'Pending'),
+    ('wishlist', 'Wishlist'),
+    ('discarded', 'Discarded'),
+]
+
 
 class CustomFilterSet(filters.FilterSet):
     quantity = filters.NumberFilter(method='filter_quantity')
     direction = filters.CharFilter(method='filter_direction')
     search = filters.CharFilter(method='filter_search')
+    status = filters.ChoiceFilter(
+        choices=STATUS_CHOICES,
+        method='filter_status_and_second_status'
+    )
 
     def filter_quantity(self, queryset, name, value):
         return queryset
@@ -26,6 +38,17 @@ class CustomFilterSet(filters.FilterSet):
             return queryset.filter(
                 Q(title__icontains=value) | Q(author__icontains=value)
             )
+        return queryset
+
+    def filter_status_and_second_status(self, queryset, name, value):
+        secondStatus = self.data.get('secondStatus')
+        print(secondStatus)
+        if value and secondStatus:
+            return queryset.filter(
+                Q(status=value) | Q(status=secondStatus)
+            )
+        elif value:
+            return queryset.filter(status=value)
         return queryset
 
     class Meta:
