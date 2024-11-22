@@ -9,7 +9,6 @@ service = build('books', 'v1', developerKey=settings.GOOGLE_API_KEY)
 def fetch_book_data_from_google_books(idGoogle):
     request = service.volumes().get(volumeId=idGoogle)
     response = request.execute()
-    print(response)
     book_info = response['volumeInfo']
     if book_info is None: return None
     return complete_book_information(book_info, idGoogle)

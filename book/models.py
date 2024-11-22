@@ -16,10 +16,10 @@ class Book(models.Model):
         ('discarded', 'Discarded'),
     ]
     title = models.CharField(max_length=255, unique=True, null=False, default='')
-    subTitle = models.CharField(max_length=255, unique=False, null=True, default='')
-    description = models.CharField(max_length=10000, unique=False, null=True, default='')
-    author = models.CharField(max_length=255, default="Anonymous")
-    genre = models.CharField(max_length=100, null=True, blank=True)
+    subTitle = models.CharField(max_length=1000, unique=False, null=True, default='')
+    description = models.CharField(max_length=20000, unique=False, null=True, default='')
+    author = models.CharField(max_length=1000, default="Anonymous")
+    genre = models.CharField(max_length=1000, null=True, blank=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     pages = models.PositiveIntegerField(null=True, blank=True)
     rating = models.PositiveSmallIntegerField(null=True, blank=True)
