@@ -33,7 +33,7 @@ class Book(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ['-created_at']
         constraints = [
             models.CheckConstraint(check=models.Q(averageRating__gte=0, averageRating__lte=5),
                                    name='average_rating_range'),
