@@ -6,5 +6,5 @@ class SharedConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'shared'
 
-    # def ready(self):
-        # call_command('migrate')
+    def ready(self):
+        call_command('migrate')
