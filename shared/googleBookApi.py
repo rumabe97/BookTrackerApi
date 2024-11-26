@@ -15,7 +15,7 @@ def fetch_book_data_from_google_books(idGoogle):
 
 
 def fetch_books_data_from_google_books(title, author, start_index, max_results):
-    query = f'intitle:{title}'
+    query = '"{title}"'
     if author:
         query += f'+inauthor:{author}'
 
