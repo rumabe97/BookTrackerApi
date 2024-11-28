@@ -92,7 +92,7 @@ class GenericViewSetWithFilters(mixins.ListModelMixin, viewsets.GenericViewSet):
         if self.filterset_class:
             filterset = self.filterset_class(self.request.GET, queryset=queryset)
             queryset = filterset.qs
-        return queryset
+        return queryset.order_by('-created_at')
 
     def get_filterset_class(self):
         if self.filterset_class:

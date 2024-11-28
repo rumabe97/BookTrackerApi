@@ -1,6 +1,5 @@
 import re
 import json
-from email.policy import default
 
 from packaging import version
 from googleapiclient.discovery import build
