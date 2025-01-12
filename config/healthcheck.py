@@ -8,7 +8,6 @@ from shared.googleBookApi import healthcheckApi
 from rest_framework.views import APIView
 from shared.mixins import APIKeyPermission
 
-
 class Healthcheck(APIView):
     def get_permissions(self):
         return [APIKeyPermission()]
