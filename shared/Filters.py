@@ -27,9 +27,9 @@ class CustomFilterSet(filters.FilterSet):
 
     def filter_direction(self, queryset, name, value):
         if value.lower() == 'asc':
-            return queryset.order_by(self.data.get('order', 'id'))
+            return queryset.order_by(self.data.get('order', 'created_at'))
         elif value.lower() == 'desc':
-            return queryset.order_by(f'-{self.data.get("order", "id")}')
+            return queryset.order_by(f'-{self.data.get("order", "created_at")}')
         else:
             return queryset
 
